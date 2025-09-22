@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: judge0-api
+    env: docker
+    docker:
+      image: docker.io/judge0/api:1.13.0
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: judge0-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: judge0-redis
+          property: connectionString
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /healthz
+
+databases:
+  - name: judge0-db
+    plan: free
+
+services:
+  - type: redis
+    name: judge0-redis
+    plan: free
